@@ -1,0 +1,194 @@
+/*calc можно заменить на clamp, которая позволяет ограничивать размер текста минимальным и максимальным значениями*/
+/* ==================== Сброс стилей ==================== */
+*, *::before, *::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: inherit; /* Наследование упрощает управление layout */
+}
+
+/* ==================== Переменные ==================== */
+:root {
+	/* Динамическая единица измерения, адаптируемая к экрану */
+	--index: clamp(0.8rem, 1vw + 1vh, 1.5rem); /* min:0.8rem, pref:1vw+1vh, max:1.5rem */
+	
+	/* Цветовые переменные */
+	--text-color: #e7e7e0; 
+	--gold-glow: 0 0 15px #9d822b; 
+	
+	/* Анимации */
+	--transition: transform 0.75s cubic-bezier(.075, .5, 0, 1); /* Плавный параллакс-эффект */
+	/* cubic-bezier обеспечивает натуральное замедление */
+}
+
+/* ==================== шрифты ==================== */
+@font-face {
+	font-family: 'Raleway';
+	src: url(../fonts/raleway-regular.woff2) format('woff2');
+	font-display: swap; 
+	font-weight: 400;
+}
+/*жирни*/
+@font-face {
+	font-family: 'Raleway';
+	src: url(../fonts/raleway-black.woff2) format('woff2');
+	font-display: swap;
+	font-weight: 900; 
+}
+
+/* ==================== Тело ==================== */
+body {
+	background-color: #010101; 
+	font-family: 'Raleway', sans-serif;
+	line-height: 1.6; 
+	box-sizing: border-box; 
+	cursor: url(/img/Minecraft\ Spider--cursor--SweezyCursors.png), auto ;
+
+}
+
+/* ==================== шапки ==================== */
+.main-header {
+	position: relative;
+	isolation: isolate; /* Создает новый контекст наложения */
+	/* isolation решает проблемы с z-index */
+}
+
+.main-header::after {
+	content: '';
+	position: absolute;
+	z-index: 100;
+	width: 100%;
+	height: calc(var(--index) * 8); /* Адаптивная высота */
+	background-image: url(../img/ground.png);
+	background-size: cover;
+	background-position: center bottom;
+	bottom: calc(var(--index) * -3.8); 
+	filter: drop-shadow(0 -2px 5px rgba(0,0,0,0.5)); /* Добавляет глубину */
+}
+
+/* ==================== Слои ==================== */
+.layers {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	overflow: hidden;
+	position: relative;
+	perspective: 1000px; /* Необходимо для 3D-эффектов */
+	/*  perspective создает ощущение глубины */
+}
+
+.layer {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	background-size: cover;
+	background-position: center;
+	will-change: transform; /* Оптимизация производительности */
+	z-index: 2;
+	transition: var(--transition);
+	backface-visibility: hidden; /* Устраняет мерцание в анимации */
+	/* backface-visibility улучшает smoothness анимаций */
+}
+
+/* Параллакс-эффекты с разной скоростью */
+.layers__base {
+	transform: translate3d(0, calc(var(--scrollTop) / 1.8), 0);
+	z-index: 0;
+}
+
+.layers__middle {
+	transform: translate3d(0, calc(var(--scrollTop) / 3), 0);
+}
+
+.layers__front {
+	transform: translate3d(0, calc(var(--scrollTop) / 6), 0);
+}
+
+/* ==================== оформление ==================== */
+.layer__header {
+	z-index: 1;
+	transform: translate3d(0, calc(var(--scrollTop) / 2.2), 0);
+	transition: var(--transition);
+	text-transform: uppercase;
+	font-weight: 900;
+	color: var(--text-color);
+	text-shadow: var(--gold-glow);
+	padding: 0 1rem; /* Защита от краев на мобильных */
+}
+
+/* Адаптивный заголовок  crfpjxysq ktc*/
+.layers__title {
+	font-size: clamp(1.7rem, 6vmin, 7rem); /* Адаптируется и к ширине и к высоте */
+	letter-spacing: clamp(0.1rem, 0.4vmin, 0.3rem);
+	margin-bottom: 0.5em; /* em для относительного отступа */
+	/* vmin - лучшая единица для адаптивного текста */
+}
+
+/* Адаптивный подзаголовок добро пожаловать*/ 
+.layers__caption {
+	font-size: clamp(1.2rem, 4vmin, 5rem);
+	letter-spacing: clamp(0.05rem, 0.4vmin, 0.17rem);
+	margin-top: clamp(-0.5rem, -1vmin, -0.2rem);
+	display: block;
+}
+
+/* ==================== MAIN ==================== */
+.main-article {
+	--main-article-transform: translate3d(0, calc(var(--scrollTop) / -8), 0);
+	min-height: 100vh;
+	background-size: cover;
+	background-position: center;
+	color: var(--text-color);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	text-align: center;
+	top: -1px; 
+	z-index: 10;
+	padding: 2rem;
+}
+
+.main-article__header {
+	font-size: clamp(3rem, 3vmax, 6rem);
+	letter-spacing: clamp(0.08rem, 0.4vw, 0.2rem);
+	transform: var(--main-article-transform);
+	transition: var(--transition);
+	margin-bottom: 1em;
+	line-height: 1.2; 
+}
+
+.main-article__paragraph {
+	max-width: clamp(22rem, 65rem, 45rem); 
+	font-size: clamp(1.5rem, 1.8vmax, 2rem);
+	margin: clamp(0.8rem, 2vh, 1.5rem) auto;
+	transform: var(--main-article-transform);
+	transition: var(--transition);
+	text-shadow: 0 0 5px rgba(0,0,0,0.7);
+}
+
+/* ==================== FOOTER ==================== */
+.copy {
+	position: absolute;
+	bottom: clamp(1.5rem, 5vmin, 3rem);
+	opacity: 0.6;
+	font-size: clamp(0.9rem, 2vmin, 1.2rem);
+	letter-spacing: clamp(0.02rem, 0.1vmin, 0.1rem);
+	width: 100%;
+	text-align: center;
+	transition: opacity 0.3s ease;
+}
+
+.copy:hover {
+	opacity: 0.9; 
+}
+
+
+
+::selection {
+	background-color: #086333bb; 
+	color: #000; 
+	text-shadow: none; 
+}
