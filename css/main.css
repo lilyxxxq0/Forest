@@ -41,7 +41,7 @@ body {
 	font-family: 'Raleway', sans-serif;
 	line-height: 1.6; 
 	box-sizing: border-box; 
-	cursor: url(/img/Minecraft-Spider-cursor-SweezyCursors.cur) ;
+	cursor: url(/img/Minecraft-Spider-cursor-SweezyCursors.cur), auto ;
 
 }
 
